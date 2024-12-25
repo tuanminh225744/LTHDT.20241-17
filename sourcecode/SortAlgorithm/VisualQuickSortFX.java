@@ -37,7 +37,6 @@ public class VisualQuickSortFX extends SortAlgorithm {
             try {
                 quickSort(0, array.length - 1);
                 highlightSorted();
-                highlightSorted();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
