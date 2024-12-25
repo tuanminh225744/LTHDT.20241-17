@@ -1,39 +1,25 @@
-package GUI;
+package Menu;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
+import Input.SortInputGUI;
 import javafx.application.Platform;
 
 public class MainMenuController {
 
-    @FXML
-    private Button bubblesortbutton;
-
-    @FXML
-    private Button quicksortbutton;
-
+    
     @FXML
     private Button help;
 
     @FXML
     private Button quit;
 
-    // Action for Bubble Sort button
     @FXML
-    void handleBubbleSort(ActionEvent event) {
-        // Logic to navigate to Bubble Sort screen
-        System.out.println("Bubble Sort selected. Navigating to Bubble Sort demonstration...");
-        // You can use Scene or Stage to navigate to the BubbleSort UI.
-    }
-
-    // Action for Quick Sort button
-    @FXML
-    void handleQuickSort(ActionEvent event) {
-        // Logic to navigate to Quick Sort screen
-        System.out.println("Quick Sort selected. Navigating to Quick Sort demonstration...");
-    }
+    private Button input;
+    
 
     // Action for Help button
     @FXML
@@ -44,9 +30,10 @@ public class MainMenuController {
         helpAlert.setHeaderText("Program Usage Instructions");
         helpAlert.setContentText(
                 "Welcome to the Sorting Demonstration Program!\n\n" +
-                "1. Select a sorting algorithm (Bubble Sort or Quick Sort).\n" +
-                "2. Follow the on-screen demonstration for sorting.\n" +
-                "3. Quit to exit the program safely.\n\n" +
+                "1. Enter array or generate random array\n"+
+                "2. Select a sorting algorithm (Bubble Sort, Insertion Sort or Quick Sort).\n" +
+                "3. Follow the on-screen demonstration for sorting.\n" +
+                "4. Quit to exit the program safely.\n\n" +
                 "Enjoy exploring sorting algorithms!"
         );
         helpAlert.showAndWait();
@@ -67,4 +54,21 @@ public class MainMenuController {
             Platform.exit(); // Properly closes the JavaFX application
         }
     }
+    
+    @FXML
+    void input(ActionEvent event) {
+    	try {
+            // Đóng cửa sổ hiện tại
+            ((Button) event.getSource()).getScene().getWindow().hide();
+
+            // Tạo một cửa sổ mới và hiển thị màn hình SortInputGUI
+            SortInputGUI sortInputGUI = new SortInputGUI();
+            Stage stage = new Stage();
+            sortInputGUI.start(stage);
+        } catch (Exception e) {
+            e.printStackTrace(); // In lỗi nếu có vấn đề
+        }
+    }
+    
+    
 }

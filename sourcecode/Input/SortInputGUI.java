@@ -1,20 +1,34 @@
-package GUI;
+package Input;
+import java.io.IOException;
+
+import SortAlgorithm.VisualBubbleSortFX;
+import SortAlgorithm.VisualInsertionSortFX;
+import SortAlgorithm.VisualQuickSortFX;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextInputDialog;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import SortAlgorithm.*;
 
 public class SortInputGUI extends Application {
 
     private int[] array; // Lưu trữ mảng hiện tại
     private TextArea arrayDisplay; // Hiển thị mảng
     private ChoiceBox<String> sortChoice; // Lựa chọn thuật toán
+	
+    
 
     @Override
     public void start(Stage primaryStage) {
+    	
         primaryStage.setTitle("Sorting Algorithms Demonstration");
 
         // Label hướng dẫn
@@ -41,11 +55,62 @@ public class SortInputGUI extends Application {
 
         // Nút chạy thuật toán
         Button runAlgorithmButton = new Button("Run Algorithm");
-        runAlgorithmButton.setOnAction(e -> primaryStage.close()); // Đi đến chạy thuật toán 
+        runAlgorithmButton.setOnAction(e -> {
+        if (array == null || array.length == 0) {
+            showError("No array to sort. Please generate or input an array first.");
+            return;
+        }
+
+        
+        if ("Bubble Sort".equals(sortChoice.getValue())) {
+            VisualBubbleSortFX visualBubbleSortFX = new VisualBubbleSortFX(array);
+            Stage stage = new Stage();
+            try {
+                visualBubbleSortFX.start(stage);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        
+        if ("Insertion Sort".equals(sortChoice.getValue())) {
+            VisualInsertionSortFX visualInsertionSortFX = new VisualInsertionSortFX(array);
+            Stage stage = new Stage();
+            try {
+                visualInsertionSortFX.start(stage);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        
+        if ("Quick Sort".equals(sortChoice.getValue())) {
+            VisualQuickSortFX visualQuickSortFX = new VisualQuickSortFX(array);
+            Stage stage = new Stage();
+            try {
+                visualQuickSortFX.start(stage);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    });
 
         // Nút quay lại
         Button backButton = new Button("Back");
-        backButton.setOnAction(e -> primaryStage.close()); // Trở về main
+        backButton.setOnAction(e -> {
+            // Đóng cửa sổ hiện tại
+            primaryStage.close();
+
+            // Mở lại màn hình menu
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Menu/GUi.fxml"));
+                Parent root = loader.load();
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.setTitle("Main Menu");
+                stage.show();
+            } catch (IOException ex) {
+                ex.printStackTrace(); // In lỗi nếu xảy ra
+            }
+        }); // Trở về main
 
         // Bố cục nút và hiển thị
         VBox layout = new VBox(10, instructionLabel, generateArrayButton, inputArrayButton,
@@ -75,12 +140,10 @@ public class SortInputGUI extends Application {
                 }
                 
                 array = new int[arraySize];
-                SortAlgorithm sorter = getSelectedAlgorithm();
-                if (sorter != null) {
-                    sorter.generateArray(arraySize); // Gọi phương thức tạo mảng
-                    array = sorter.getArray();      // Lấy mảng vừa tạo
-                    displayArray(array);            // Hiển thị mảng trong TextArea
+                for (int i = 0; i < arraySize; i++) {
+                    array[i] = (int) (Math.random() * 100) + 1; // Giá trị từ 1 đến 100
                 }
+                displayArray(array);
             } catch (NumberFormatException e) {
                 showError("Invalid size. Please enter a positive integer.");
             }
@@ -108,21 +171,7 @@ public class SortInputGUI extends Application {
         });
     }
     
-    private SortAlgorithm getSelectedAlgorithm() {
-        if (array == null) array = new int[0]; // Khởi tạo mảng rỗng nếu chưa có
-
-        String algorithm = sortChoice.getValue();
-        switch (algorithm) {
-            case "Bubble Sort":
-                return new BubbleSort(array);
-            case "Quick Sort":
-                return new QuickSort(array);
-            case "Insertion Sort":
-                return new InsertionSort(array);
-            default:
-                return null;
-        }
-    }
+    
 
 
     
@@ -145,8 +194,6 @@ public class SortInputGUI extends Application {
         alert.showAndWait();
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+    
 }
 

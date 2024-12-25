@@ -1,4 +1,4 @@
-package GUI;
+package Menu;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,7 +12,7 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         App.primaryStage = primaryStage; // Gán Stage cho biến tĩnh
-        changeScene("GUi.fxml"); // Hiển thị Scene chính
+        changeScene("/Menu/GUi.fxml"); // Hiển thị Scene chính
         primaryStage.setTitle("Main Menu");
         primaryStage.show();
     }
@@ -20,7 +20,7 @@ public class App extends Application {
     public static void changeScene(String fxmlFile) throws Exception {
         // Thay đổi Scene với tệp FXML mới
         Parent root = FXMLLoader.load(App.class.getResource(fxmlFile));
-        primaryStage.setScene(new Scene(root, 600, 400));
+        primaryStage.setScene(new Scene(root, 300, 200));
     }
 
     public static void main(String[] args) {
